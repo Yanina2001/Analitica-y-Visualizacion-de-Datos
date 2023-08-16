@@ -1,0 +1,391 @@
+---
+title: "Project 1"
+output: html_notebook
+---
+
+##### Materia: Analítica y Visualización de Datos, 5CDM1
+
+```{r}
+print("-----------------------------")
+```
+
+##### Alumnos:
+##### De Luna Ocampo Yanina
+##### Ramírez Méndez Kevin
+
+```{r}
+print("-----------------------------")
+```
+
+##### Data: Iris
+
+```{r}
+print("-----------------------------")
+```
+
+##### Loading data
+```{r}
+library(RCurl)
+urlfile<-'https://gist.github.com/Thanatoz-1/9e7fdfb8189f0cdf5d73a494e4a6392a#file-iris_dataset-csv'
+iris <-read.csv(url(urlfile))
+```
+
+##### See the first six rows of the data
+```{r}
+head(iris)
+```
+
+##### View all the data
+```{r}
+View(iris)
+```
+
+##### Separate data according the type of flower
+```{r}
+sepleng_setosa <- iris$sepal.length [1:50]
+sepwid_setosa <- iris$sepal.width [1:50]
+petleng_setosa <- iris$petal.length [1:50]
+petwid_setosa <- iris$petal.width [1:50]
+
+sepleng_versicolor <- iris$sepal.length [51:100]
+sepwid_versicolor <- iris$sepal.width [51:100]
+petleng_versicolor <- iris$petal.length [51:100]
+petwid_versicolor <- iris$petal.width [51:100]
+
+sepleng_virginica <- iris$sepal.length [101:150]
+sepwid_virginica <- iris$sepal.width [101:150]
+petleng_virginica <- iris$petal.length [101:150]
+petwid_virginica <- iris$petal.width [101:150]
+```
+
+```{r}
+bubble_sort <- function(x){
+  n <- length(x)
+  for(i in 1:(n-1)) {
+    for(j in (i+1):n) {
+      if(x[i] >= x[j]) {
+        temp <- x[i]
+         x[i] <- x[j]
+          x[j] <- temp
+      }
+    }
+  }
+  return(x)
+}
+```
+
+###### Create the functions we need to calculate all the analysis
+```{r}
+sum <- 0
+media <- function(x) {
+    for(i in x) {
+    sum <- sum + i
+    }
+    return(sum /length(x))
+}
+```
+
+```{r}
+sum <- 0
+mediaGen <- function(x) {
+    for(i in x) {
+    sum <- sum + i
+    }
+    return(sum /length(x))
+}
+```
+
+```{r}
+mediana <- function(x){
+   x <- bubble_sort(x)
+   if((length(x) %% 2) == 0){
+    return((x[length(x)/2] + x[length(x)/2 + 1]) / 2)
+   }
+   else{
+     return(x[(length(x)/2) + 0.5])
+   }
+}
+```
+
+```{r}
+moda <- function(x) {                     
+  unique_x <- unique(x)
+  tabulate_x <- tabulate(match(x, unique_x))
+  unique_x[tabulate_x == max(tabulate_x)]
+}
+```
+
+```{r}
+varianza <- function(x){
+  x <- as.numeric(x)
+  x <- na.omit(x)
+  m <- media(x)
+  return(
+    sum((x-m)^2, na.rm = TRUE)/(length(x) - 1)
+  )
+}
+```
+
+```{r}
+desvest <- function(x) {
+    sqrt(varianza(x))  
+}
+```
+
+```{r}
+column_min <- function(x){
+  temp = x[1]
+  i = 2
+  while (i < length(x)) {
+    if(temp > x[i]){
+      temp = x[i]
+    }
+    i = i + 1
+  }
+  return(temp)
+}
+
+```
+
+```{r}
+column_max <- function(x){
+  temp = x[1]
+  i = 2
+  while (i < length(x)) {
+    if(temp < x[i]){
+      temp = x[i]
+    }
+    i = i + 1
+  }
+  return(temp)
+}
+```
+
+```{r}
+area <- function(x,y){
+  temp <- c()
+  for (i in 1:length(x)){
+    temp <- append(temp, x[i]*y[i])
+  }
+  return(temp)
+}
+
+```
+
+```{r}
+print("---------------SETOSA---------------")
+
+mediana_sepleng_setosa <- mediana(sepleng_setosa)
+print("La mediana de 'sepal leng' en Iris setosa es: ")
+print(mediana_sepleng_setosa)
+mediana_sepwid_setosa <- mediana(sepwid_setosa)
+print("La mediana de 'sepal width' en Iris setosa es: ")
+print(mediana_sepwid_setosa)
+mediana_petleng_setosa <- mediana(petleng_setosa)
+print("La mediana de 'petal leng' en Iris setosa es: ")
+print(mediana_petleng_setosa)
+mediana_petwid_setosa <- mediana(petwid_setosa)
+print("La mediana de 'sepal width' en Iris setosa es: ")
+print(mediana_petwid_setosa)
+
+print("-------------------------------------")
+
+moda_sepleng_setosa <- moda(sepleng_setosa)
+print("La moda de 'sepal leng' en Iris setosa es: ")
+print(moda_sepleng_setosa)
+moda_sepwid_setosa <- moda(sepwid_setosa)
+print("La moda de 'sepal width' en Iris setosa es: ")
+print(moda_sepwid_setosa)
+moda_petleng_setosa <- moda(petleng_setosa)
+print("La moda de 'petal leng' en Iris setosa es: ")
+print(moda_petleng_setosa)
+moda_petwid_setosa <- moda(petwid_setosa)
+print("La moda de 'sepal width' en Iris setosa es: ")
+print(moda_petwid_setosa)
+
+print("-------------------------------------")
+
+varianza_sepleng_setosa <- varianza(sepleng_setosa)
+print("La varianza de 'sepal leng' en Iris setosa es: ")
+print(varianza_sepleng_setosa)
+varianza_sepwid_setosa <- varianza(sepwid_setosa)
+print("La varianza de 'sepal width' en Iris setosa es: ")
+print(varianza_sepwid_setosa)
+varianza_petleng_setosa <- varianza(petleng_setosa)
+print("La varianza de 'petal leng' en Iris setosa es: ")
+print(varianza_petleng_setosa)
+varianza_petwid_setosa <- varianza(petwid_setosa)
+print("La varianza de 'sepal width' en Iris setosa es: ")
+print(varianza_petwid_setosa)
+
+print("-------------------------------------")
+
+desvest_sepleng_setosa <- desvest(sepleng_setosa)
+print("La desviacion estandar de 'sepal leng' en Iris setosa es: ")
+print(desvest_sepleng_setosa)
+desvest_sepwid_setosa <- desvest(sepwid_setosa)
+print("La desviacion estandar de 'sepal width' en Iris setosa es: ")
+print(desvest_sepwid_setosa)
+desvest_petleng_setosa <- desvest(petleng_setosa)
+print("La desviacion estandar de 'petal leng' en Iris setosa es: ")
+print(desvest_petleng_setosa)
+desvest_petwid_setosa <- desvest(petwid_setosa)
+print("La desviacion estandar de 'sepal width' en Iris setosa es: ")
+print(desvest_petwid_setosa)
+
+("-------------------------------------")
+```
+
+```{r}
+print("-------------VERSICOLOR-------------")
+
+mediana_sepleng_versicolor <- mediana(sepleng_versicolor)
+print("La mediana de 'sepal leng' en Iris versicolor es: ")
+print(mediana_sepleng_versicolor)
+mediana_sepwid_versicolor <- mediana(sepwid_versicolor)
+print("La mediana de 'sepal width' en Iris versicolor es: ")
+print(mediana_sepwid_versicolor)
+mediana_petleng_versicolor <- mediana(petleng_versicolor)
+print("La mediana de 'petal leng' en Iris versicolor es: ")
+print(mediana_petleng_versicolor)
+mediana_petwid_versicolor <- mediana(petwid_versicolor)
+print("La mediana de 'sepal width' en Iris versicolor es: ")
+print(mediana_petwid_versicolor)
+
+print("-------------------------------------")
+
+moda_sepleng_versicolor <- moda(sepleng_versicolor)
+print("La moda de 'sepal leng' en Iris versicolor es: ")
+print(moda_sepleng_versicolor)
+moda_sepwid_versicolor <- moda(sepwid_versicolor)
+print("La moda de 'sepal width' en Iris versicolor es: ")
+print(moda_sepwid_versicolor)
+moda_petleng_versicolor <- moda(petleng_versicolor)
+print("La moda de 'petal leng' en Iris versicolor es: ")
+print(moda_petleng_versicolor)
+moda_petwid_versicolor <- moda(petwid_versicolor)
+print("La moda de 'sepal width' en Iris versicolor es: ")
+print(moda_petwid_versicolor)
+
+print("-------------------------------------")
+
+varianza_sepleng_versicolor <- varianza(sepleng_versicolor)
+print("La varianza de 'sepal leng' en Iris versicolor es: ")
+print(varianza_sepleng_versicolor)
+varianza_sepwid_versicolor <- varianza(sepwid_versicolor)
+print("La varianza de 'sepal width' en Iris versicolor es: ")
+print(varianza_sepwid_versicolor)
+varianza_petleng_versicolor <- varianza(petleng_versicolor)
+print("La varianza de 'petal leng' en Iris versicolor es: ")
+print(varianza_petleng_versicolor)
+varianza_petwid_versicolor <- varianza(petwid_versicolor)
+print("La varianza de 'sepal width' en Iris versicolor es: ")
+print(varianza_petwid_versicolor)
+
+print("-------------------------------------")
+
+desvest_sepleng_versicolor <- desvest(sepleng_versicolor)
+print("La desviacion estandar de 'sepal leng' en Iris versicolor es: ")
+print(desvest_sepleng_versicolor)
+desvest_sepwid_versicolor <- desvest(sepwid_versicolor)
+print("La desviacion estandar de 'sepal width' en Iris versicolor es: ")
+print(desvest_sepwid_versicolor)
+desvest_petleng_versicolor <- desvest(petleng_versicolor)
+print("La desviacion estandar de 'petal leng' en Iris versicolor es: ")
+print(desvest_petleng_versicolor)
+desvest_petwid_versicolor <- desvest(petwid_versicolor)
+print("La desviacion estandar de 'sepal width' en Iris versicolor es: ")
+print(desvest_petwid_versicolor)
+
+("-------------------------------------")
+```
+
+```{r}
+print("-------------VIRGINICA--------------")
+
+mediana_sepleng_virginica <- mediana(sepleng_virginica)
+print("La mediana de 'sepal leng' en Iris virginica es: ")
+print(mediana_sepleng_virginica)
+mediana_sepwid_virginica <- mediana(sepwid_virginica)
+print("La mediana de 'sepal width' en Iris virginica es: ")
+print(mediana_sepwid_virginica)
+mediana_petleng_virginica <- mediana(petleng_virginica)
+print("La mediana de 'petal leng' en Iris virginica es: ")
+print(mediana_petleng_virginica)
+mediana_petwid_virginica <- mediana(petwid_virginica)
+print("La mediana de 'sepal width' en Iris virginica es: ")
+print(mediana_petwid_virginica)
+
+print("-------------------------------------")
+
+moda_sepleng_virginica <- moda(sepleng_virginica)
+print("La moda de 'sepal leng' en Iris virginica es: ")
+print(moda_sepleng_virginica)
+moda_sepwid_virginica <- moda(sepwid_virginica)
+print("La moda de 'sepal width' en Iris virginica es: ")
+print(moda_sepwid_virginica)
+moda_petleng_virginica <- moda(petleng_virginica)
+print("La moda de 'petal leng' en Iris virginica es: ")
+print(moda_petleng_virginica)
+moda_petwid_virginica <- moda(petwid_virginica)
+print("La moda de 'sepal width' en Iris virginica es: ")
+print(moda_petwid_virginica)
+
+print("-------------------------------------")
+
+varianza_sepleng_virginica<- varianza(sepleng_virginica)
+print("La varianza de 'sepal leng' en Iris virginica es: ")
+print(varianza_sepleng_virginica)
+varianza_sepwid_virginica <- varianza(sepwid_virginica)
+print("La varianza de 'sepal width' en Iris virginica es: ")
+print(varianza_sepwid_virginica)
+varianza_petleng_virginica <- varianza(petleng_virginica)
+print("La varianza de 'petal leng' en Iris virginica es: ")
+print(varianza_petleng_virginica)
+varianza_petwid_virginica <- varianza(petwid_virginica)
+print("La varianza de 'sepal width' en Iris virginica es: ")
+print(varianza_petwid_virginica)
+
+print("-------------------------------------")
+
+desvest_sepleng_virginica <- desvest(sepleng_virginica)
+print("La desviacion estandar de 'sepal leng' en Iris virginica es: ")
+print(desvest_sepleng_virginica)
+desvest_sepwid_virginica <- desvest(sepwid_virginica)
+print("La desviacion estandar de 'sepal width' en Iris virginica es: ")
+print(desvest_sepwid_virginica)
+desvest_petleng_virginica <- desvest(petleng_virginica)
+print("La desviacion estandar de 'petal leng' en Iris virginica es: ")
+print(desvest_petleng_virginica)
+desvest_petwid_virginica <- desvest(petwid_virginica)
+print("La desviacion estandar de 'sepal width' en Iris virginica es: ")
+print(desvest_petwid_virginica)
+
+print("-------------------------------------")
+```
+
+###### Obtaining the minimum and maximum values of each column
+```{r}
+print(paste("El minimo de Sepal.Length es : ", column_min(iris$Sepal.Length)))
+print(paste("El minimo de Sepal.Width es : ", column_min(iris$Sepal.Width)))
+print(paste("El minimo de Petal.Length es : ", column_min(iris$Petal.Length)))
+print(paste("El minimo de Petal.Width es : ", column_min(iris$Petal.Width)))
+
+print(paste("El maximo de Sepal.Length es : ", column_max(iris$Sepal.Length)))
+print(paste("El maximo de Sepal.Width es : ", column_max(iris$Sepal.Width)))
+print(paste("El maximo de Petal.Length es : ", column_max(iris$Petal.Length)))
+print(paste("El maximo de Petal.Width es : ", column_max(iris$Petal.Width)))
+
+print("-------------------------------------")
+```
+
+###### Area of sepal and petal
+```{r}
+area_sepalo <- area(iris$Sepal.Length,iris$Sepal.Width)
+area_petalo <- area(iris$Petal.Length,iris$Petal.Width)
+
+print(paste("El area de cada sepalo es: ", area_sepalo ,"con un minimo:", column_min(area_sepalo),"y con un maximo:", column_max(area_sepalo)))
+print(paste("El area de cada petalo es: ", area_petalo ,"con un minimo:", column_min(area_petalo),"y con un maximo:", column_max(area_petalo)))
+
+print("-------------------------------------")
+```

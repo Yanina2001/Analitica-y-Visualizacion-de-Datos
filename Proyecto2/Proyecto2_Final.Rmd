@@ -1,0 +1,181 @@
+---
+title: "Project 2"
+output: html_notebook
+---
+
+### Materia: Analítica y Visualización de Datos, 5CDM1
+
+##### Alumnos:
+
+##### De Luna Ocampo Yanina
+
+##### Ramírez Méndez Kevin
+
+
+##### Data: Iris
+
+##### See the first six rows of the data
+
+```{r}
+head(iris)
+```
+
+##### View all the data
+
+```{r}
+View(iris)
+```
+
+##### Select the libraries we are going to use
+```{r}
+install.packages('arules')
+install.packages("geometry")
+library("arules")
+library("geometry")
+```
+##### Separating the data
+```{r}
+#df <- read.csv(iris, header = FALSE,col.names =names)
+df <- iris
+colnames(df) <- c("sepal_Length","sepal_Width", "petal_Length", "petal_Width", "class")
+sepal_L <- df["sepal_Length"]
+sepal_W <- df["sepal_Width"]
+petal_L <- df["petal_Length"]
+petal_W <- df["petal_Width"]
+
+area_S <-  sepal_L * sepal_W
+area_P <-  petal_L * petal_W
+
+colnames(area_S) <- "area_Sepal"
+df <- cbind(df, area_S)
+
+colnames(area_P) <- "area_Petalo"
+df <- cbind(df, area_P)
+
+setosa_Data <-df[which(df$class=="setosa"),]
+Versicolor_Data <- df[which(df$class=="versicolor"),]
+Virginica_Data <- df[which(df$class=="virginica"),]
+```
+```{r}
+print(setosa_Data)
+```
+```{r}
+print(Versicolor_Data)
+```
+```{r}
+print(Virginica_Data)
+```
+
+
+```{r}
+print("Cuantificar el valor de disimilitud con la norma Euclidea entre las flores: Setosa, Versicolor y Virginica, tomando como base la longitud anchura del sepalo y petalo de cada flor.")
+```
+
+```{r}
+euclidean <- function(a, b) sqrt(sum((a - b)^2))
+
+show_euclidean <- function(df1, df2){
+  cat("\n")
+  cat("\n La disimilitud con la norma Euclidea de sepal_Length es: ")
+  cat(euclidean(df1$sepal_Length, df2$sepal_Length ))
+  cat("\n La disimilitud con la norma Euclidea de sepal_Width es: ")
+  cat(euclidean(df1$sepal_Width, df2$sepal_Width))
+  cat("\n La disimilitud con la norma Euclidea de petal_Length es: ")
+  cat(euclidean(df1$petal_Length, df2$petal_Length))
+  cat("\n La disimilitud con la norma Euclidea de petal_Width es: ")
+  cat(euclidean(df1$petal_Width, df2$petal_Width))
+  
+  cat("\n La disimilitud con la norma Euclidea no aplica para clase.\n")
+}
+
+show_euclidean_data <- function(){
+  cat("\n La disimilitud con la norma Euclidea para Iris Setosa e Iris Versicolor es: ")
+  show_euclidean(setosa_Data, Versicolor_Data)
+  cat("\n La disimilitud con la norma Euclidea para Iris Setosar e Iris Virginica es: ")
+  show_euclidean(setosa_Data, Virginica_Data)
+  cat("\n La disimilitud con la norma Euclidea para Iris Versicolor e Iris Virginica es: ")
+  show_euclidean(Versicolor_Data, Virginica_Data)
+}
+
+show_euclidean_data()
+```
+
+```{r}
+print("Establecer el umbral de disimilitud entre las 3 clases de flores, con base en los valores de área de cada flor.")
+```
+
+```{r}
+show_disimilitud_data <- function(){
+  cat("\n La disimilitud con la norma Euclidea para Iris Setosa, e Iris Versicolor es:")
+  print(euclidean(setosa_Data$area_Sepal, setosa_Data$area_Petalo))
+  cat("\n La disimilitud con la norma Euclidea para Iris Setosar e Iris Virginica es: ")
+  print(euclidean(Versicolor_Data$area_Sepal, Versicolor_Data$area_Petalo))
+  cat("\n La disimilitud con la norma Euclidea para Iris Versicolor e Iris Virginica es: ")
+  print(euclidean(Virginica_Data$area_Sepal, Virginica_Data$area_Petalo))
+}
+
+show_disimilitud_data()
+
+
+norma <- function(df) {
+  df_ma = df[,-5]
+  cat(norm(as.matrix(df_ma)))
+}
+
+show_dataNorm <- function(){
+  cat("\n La norma de Iris Setosa es: ")
+  norma(setosa_Data)
+  cat("\n La norma de Iris Versicolor es: ")
+  norma(Versicolor_Data)
+  cat("\n La norma de Iris Virginica es: ")
+  norma(Virginica_Data)
+}
+
+show_dataNorm()
+```
+
+```{r}
+print("Calcular la distancia entre los elementos de la clase Setosa-Versicolor; Setosa-Virginica; Versicolor-Virginica; Versicolor-Setosa; Virginica-Setosa; Virginica-Versicolor.")
+```
+
+```{r}
+show_outerData <- function(){
+  cat("\n Calcular la distancia entre los elementos de la clase: ")
+  cat("\n Setosa-Versicolor: ")
+  print(outer(as.matrix(setosa_Data[,-5]),as.matrix(Versicolor_Data[,-5])))
+  cat("\n Setosa-Virginica: ")
+  print(outer(as.matrix(setosa_Data[,-5]),as.matrix(Virginica_Data[,-5])))
+  cat("\n Versicolor-Virginica: ")
+  print(outer(as.matrix(Versicolor_Data[,-5]),as.matrix(Virginica_Data[,-5])))
+  cat("\n Versicolor-Setosa: ")
+  print(outer(as.matrix(Versicolor_Data[,-5]),as.matrix(setosa_Data[,-5])))
+  cat("\n Virginica-Setosa: ")
+  print(outer(as.matrix(Virginica_Data[,-5]),as.matrix(setosa_Data[,-5])))
+  cat("\n Virginica-Versicolor: ")
+  print(outer(as.matrix(Virginica_Data[,-5]),as.matrix(Versicolor_Data[,-5])))
+}
+
+show_outerData()
+```
+
+```{r}
+print("Calcular el producto interno entre cada clase de flores Setosa-Versicolor; Setosa-Virginica; Versicolor-Virginica; Versicolor-Setosa; Virginica-Setosa; Virginica-Versicolor")
+```
+
+```{r}
+show_dotData <- function(){
+  cat("\n Calcular producto interno.")
+  
+  cat("\n Setosa-Versicolor: ")
+  print(dot(as.matrix(setosa_Data[,-5]), as.matrix(Versicolor_Data[,-5])))
+  cat("\n Setosa-Virginica: ")
+  print(dot(as.matrix(setosa_Data[,-5]), as.matrix(Virginica_Data[,-5])))
+  cat("\n Versicolor-Virginica: ")
+  print(dot(as.matrix(Versicolor_Data[,-5]), as.matrix(Virginica_Data[,-5])))
+  
+  cat("\n No se realizaron todas las combinaciones por que da el mismo resultado.")
+}
+
+show_dotData()
+```
+

@@ -1,0 +1,112 @@
+---
+title: "Project 4"
+output: html_notebook
+---
+
+### Materia: Analítica y Visualización de Datos, 5CDM1
+
+##### Alumnos:
+
+##### De Luna Ocampo Yanina
+
+##### Ramírez Méndez Kevin
+
+##### Data: corpo.csv
+
+##### Select the libraries we are going to use
+```{r}
+library("ggplot2")
+```
+
+##### Importing data
+```{r}
+Corporaciones <- read.csv("C:/Users/Usuario/Desktop/ESCOM/Ciencias/Quinto/Analítica y visualización de datos/Proyecto4/Corpo.csv")
+```
+
+##### Separating the data that we are going to use in this case
+```{r}
+print("************************")
+
+df_Ford = Corporaciones[Corporaciones$Compania == "Ford",]
+df_Exxon = Corporaciones[Corporaciones$Compania == "Exxon",]
+
+theList <- as.data.frame(t(c(df_Ford[-1])), row.names = NULL)
+
+df_twoCor <- rbind(df_Ford, df_Exxon)
+Corporaciones = Corporaciones[,-1]
+df_twoCor <- sapply(df_twoCor, as.numeric)
+
+df_twoCor$mahalanobis<- mahalanobis(Corporaciones, colMeans(Corporaciones), cov(Corporaciones))
+print(df_twoCor)
+```
+
+##### Plot
+```{r}
+num.outliers <- 3
+mah.ordenacion <- order(mahalanobis(Corporaciones , colMeans(Corporaciones), cov(Corporaciones)), decreasing=TRUE)
+outlier3 <- rep(FALSE , nrow(Corporaciones))
+outlier3[mah.ordenacion[1:num.outliers]] <- TRUE
+colorear.outlier <- outlier3 * 50
+
+plot(Corporaciones, pch=0)
+points(Corporaciones , pch=colorear.outlier)
+```
+
+##### Separating the data that we are going to use in this case
+```{r}
+print("************************")
+
+df_GM = Corporaciones[Corporaciones$Compania == "General Motors",]
+df_IBM = Corporaciones[Corporaciones$Compania == "IBM",]
+
+lista1 <- as.data.frame(t(c(df_GM[-1])), row.names = NULL)
+
+df_twoCor_idem <- rbind(df_GM, df_IBM)
+Corporaciones = Corporaciones[,-1]
+df_twoCor_idem <- sapply(df_twoCor_idem, as.numeric)
+
+df_twoCor_idem$mahalanobis<- mahalanobis(Corporaciones, colMeans(Corporaciones), cov(Corporaciones))
+print(df_twoCor_idem)
+```
+
+##### Plot
+```{r}
+num.outliers <- 3
+mah.ordenacion <- order(mahalanobis(Corporaciones , colMeans(Corporaciones), cov(Corporaciones)), decreasing=TRUE)
+outlier3 <- rep(FALSE , nrow(Corporaciones))
+outlier3[mah.ordenacion[1:num.outliers]] <- TRUE
+colorear.outlier <- outlier3 * 50
+
+plot(Corporaciones, pch=0)
+points(Corporaciones , pch=colorear.outlier)
+```
+
+
+##### Separating the data that we are going to use in this case
+```{r}
+print("************************")
+
+df_PM = Corporaciones[Corporaciones$Compania == "Philip Morrls",]
+df_Texaco = Corporaciones[Corporaciones$Compania == "Texaco",]
+
+lista2 <- as.data.frame(t(c(df_PM[-1])), row.names = NULL)
+
+df_twoCor_iidem <- rbind(df_PM, df_Texaco)
+Corporaciones = Corporaciones[1]
+df_twoCor_iidem <- sapply(df_twoCor_iidem, as.numeric)
+
+df_twoCor_iidem$mahalanobis<- mahalanobis(Corporaciones, colMeans(Corporaciones), cov(Corporaciones))
+print(df_twoCor_iidem)
+```
+
+##### Plot
+```{r}
+num.outliers <- 3
+mah.ordenacion <- order(mahalanobis(Corporaciones , colMeans(Corporaciones), cov(Corporaciones)), decreasing=TRUE)
+outlier3 <- rep(FALSE , nrow(Corporaciones))
+outlier3[mah.ordenacion[1:num.outliers]] <- TRUE
+colorear.outlier <- outlier3 * 50
+
+plot(Corporaciones, pch=0)
+points(Corporaciones , pch=colorear.outlier)
+```

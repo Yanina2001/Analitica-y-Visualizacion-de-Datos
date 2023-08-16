@@ -1,0 +1,73 @@
+---
+title: "Iris dataset analysis, tarea 2"
+output: html_notebook
+---
+
+##### Alumno: De Luna Ocampo Yanina
+##### Materia: Analítica y Visualización de Datos, 5CDM1
+##### Dataset: Iris
+
+```{r}
+print("\n")
+```
+Importing data..., select your .csv
+```{r}
+iris <- read.csv("https://gist.github.com/Thanatoz-1/9e7fdfb8189f0cdf5d73a494e4a6392a", quote = "", header = TRUE)
+```
+
+View all the data
+```{r}
+View(df)
+```
+
+Answer the following questions
+
+Pregunta 1: ¿Cuál de los datos prodría contener errores o asignaciones de clases falsas?
+```{r}
+print("R: La que podría ser erronea es la clasificación final de las 3 especies, la última columna, debido a que puede ser que sean muy similares la caracteristicas que definen a una flor, existan subgrupos dentro de estas o los datos recolectados no son lo suficientemente diversos, entre muchas posibilidades más.")
+```
+
+Pregunta 2: ¿Cuál es el error causado por redondear los datos a un decimal?
+```{r}
+print("R: Al redondear a un decimal, ya sea mayor o menos, y al tratarse de flores que tienen tamaños muy similares, es probable que esto nos lleve a clasificar erroneamente las 3 diferentes especies y se combienen entre sí.")
+```
+
+Pregunta 3: ¿Cuál es la correalción entre la longitud del ancho de los pétalos?
+```{r}
+data("iris")
+my_data <- iris[,c(3,4)]
+res <- cor(my_data)
+round(res,2)
+corrplot::corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, insig = "p-value",)
+```
+
+```{r}
+print("R: Como podemos observar tienen una correlacion positiva alta (.96). Esto quiere decir que el ancho del petalo esta directamente relacionado con su largo.")
+```
+Pregunta 4: ¿Qué par de dimensiones están más correlacionadas?
+```{r}
+data("iris")
+my_data <- iris[,c(1,2,3,4)]
+res <- cor(my_data)
+round(res,2)
+corrplot::corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, insig = "p-value",)
+```
+
+```{r}
+print("R: El largo del petalo y el ancho.")
+```
+Pregunta 5: Ninguna de las flores en el dataset tiene un ancho de sépalo de 1.8 cm. ¿Qué longitud de sépalo esperaríamos para una flor que tuviera 1.8 cm como ancho de sépalo?
+```{r}
+print("R: La anchura y la longitud del sepalo al estar poco relacionadas, su valor no se podría determinar.")
+```
+Pregunta 6: ¿A qué especie pertenecería un Iris con un ancho de sépalo de 1.8 cm?
+```{r}
+print("R: Quizá se asginaría con la especia -Versicolor-, debido a que una de las caracteristicas de estas es que sus sepalos son pequeños.")
+```
+Pregunta 7: ¿Las 3 especies contienen subespecies que pueden identificarse a partir de los datos?
+```{r}
+print("R: Sí, pues hay ciertos valores que son similares entre especies.")
+```
+

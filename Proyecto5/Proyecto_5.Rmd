@@ -1,0 +1,98 @@
+---
+title: "R Notebook"
+project: "Project 5"
+date: "2023-01-19"
+output: html_notebook
+---
+
+### Materia: Analítica y Visualización de Datos, 5CDM1
+
+##### Alumna:
+
+##### De Luna Ocampo Yanina
+
+##### Data: covid_abstracts.csv
+
+```{r}
+path <- file.choose()
+data <- read.csv(path, header = T, sep = ",")
+row.names(data) <- data[, 1]
+data <- data[, 2:dim(data)[2]]
+```
+
+```{r}
+n <- 100
+titles <- rownames(data)[1:100]
+abstracts <- data$abstract[1:100]
+abstracts <- tolower(abstracts)
+abstracts <- strsplit(abstracts, " ")
+all_words <- unlist(abstracts, use.names = FALSE)
+vocabulary <- levels(factor(all_words))
+vocabulary <- vocabulary[-(vocabulary == '')]
+
+```
+
+
+```{r}
+
+all_vector_counts <- integer()
+for (i in 1:n) {
+  vector_counts <- numeric(length(vocabulary))
+  abstract_aux <- abstracts[[i]]
+  
+  for (j in 1:length(vocabulary)) {
+    count <- length(which(abstract_aux == vocabulary[j]))
+    vector_counts[j] <- count
+  }
+  all_vector_counts <- c(all_vector_counts, vector_counts)
+}
+
+words_matrix_counts <- matrix(all_vector_counts, ncol = length(vocabulary), byrow = TRUE)
+
+```
+
+```{r}
+
+cosine <- function(x, y) {
+  n <- length(x)
+  sum_xy <- as.integer(x %*% y)
+  sum_x_2 <- sum(x ** 2)
+  sum_y_2 <- sum(y ** 2)
+  sim_cosine <- sum_xy / ((sum_x_2 * sum_y_2) ** (1 / 2))
+  
+  return (sim_cosine)
+}
+
+sim_cosine <- cosine(words_matrix_counts[1,], words_matrix_counts[2,])
+sim_cosines <- matrix(, ncol = n, nrow = n)
+
+for (i in 1:n) {
+  for (j in 1:n) {
+    sim_cosines[i, j] <- round(cosine(words_matrix_counts[i, ], words_matrix_counts[j, ]), digits = 4)
+  }
+}
+
+for (i in 1:1) {
+  sim_cosines_abstract_i <- as.numeric(sim_cosines[i, ])
+  title_cosine <- data.frame(titles, sim_cosines_abstract_i)
+}
+
+```
+
+
+```{r, fig.width = 10, fig.height = 20}
+
+library(ggplot2)
+
+title_cosine$titles <- factor(title_cosine$titles, levels = title_cosine$titles[order(title_cosine$sim_cosines_abstract_i)])
+plot <-  ggplot(title_cosine, aes(x=sim_cosines_abstract_i, y=titles)) +
+  geom_bar(stat="identity", position = "dodge", fill = rownames(title_cosine)) +
+  geom_text(aes(label = sim_cosines_abstract_i), hjust = -0.1, colour = "black", size = 2.5) +
+  theme(axis.text.x = element_text(size=5), axis.text.y = element_text(size=7))
+plot
+# Para ver la gráfica más en detalle, abrir la gráfica en una nueva ventana.
+# El botón es el primero de izquierda a derecha en la esquina superior derecha de la gráfica
+
+
+```
+

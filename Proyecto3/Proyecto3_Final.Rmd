@@ -1,0 +1,68 @@
+---
+title: "Project 3"
+output: html_notebook
+---
+
+### Materia: Analítica y Visualización de Datos, 5CDM1
+
+##### Alumnos:
+
+##### De Luna Ocampo Yanina
+
+##### Ramírez Méndez Kevin
+
+##### Data: Iris
+
+##### Select the libraries we are going to use
+```{r}
+library("ggplot2")
+```
+
+##### Importing data
+```{r}
+dat <- iris
+```
+
+##### See the first six rows of the data
+```{r}
+head(dat)
+```
+
+##### View all the data
+```{r}
+View(dat)
+```
+
+##### Separating the data
+```{r}
+df_Setosa = dat[dat$class == "Iris-setosa",]
+df_Versicolor = dat[dat$class == "Iris-versicolor",]
+df_Virginica = dat[dat$class == "Iris-virginica",]
+```
+
+##### Combine df_Setosa, df_Versicolor and df_Virginica and use sapply that interpret the output to the most fundamental data structure possible
+```{r}
+theList <- as.data.frame(t(c(df_Setosa[-1])), row.names = NULL)
+
+dfThree_Iris <- rbind(df_Setosa, df_Versicolor, df_Virginica)
+dat = dat[,-5]
+dfThree_Iris <- sapply(dfThree_Iris, as.numeric)
+```
+
+##### Use the mahalanobis function to see the distance
+```{r}
+dfThree_Iris$mahalanobis <- mahalanobis(dat, colMeans(dat), cov(dat))
+print(dfThree_Iris)
+```
+
+##### The visualization of what we are looking for
+```{r}
+num.outliers <- 3
+mah.ordenacion <- order(mahalanobis(dat , colMeans(dat), cov(dat)), decreasing=TRUE)
+ouLi_3 <- rep(FALSE , nrow(dat))
+ouLi_3[mah.ordenacion[1:num.outliers]] <- TRUE
+colorear.outlier <- ouLi_3 * 50
+
+plot(dat , pch=0)
+points(dat , pch=colorear.outlier)
+```

@@ -1,0 +1,70 @@
+---
+title: "Tarea 1: Resolución de preguntas para conjuntos de datos Iris"
+output: html_notebook
+---
+Alumno: Ramirez Mendez Kevin
+
+Asignatura: Visualizacion y Analitica de Datos
+
+Dataset: Iris
+
+```{r}
+View(iris)
+```
+
+¿Cuál de los datos podría contener errores o
+asignaciones de clases falsas?
+
+R: La clasificación final de las 3 especies puede ser erronea si son muy similares la caracteristicas 
+que definen a una flor o existen subgrupos dentro de estas o los datos recolectados no son lo suficientemente diversos, etc.
+
+¿Cuál es el error causado por redondear los
+datos a un decimal?
+
+R: Al redondear a un decimal y tratarse de flores es muy con tamaños similares es muy probable que esto nos lleve a clasificar erroneamente las 3 diferentes especies.
+
+¿Cuál es la correlación entre la longitud y el
+ancho de los pétalos?
+
+R:Tienen una correlacion Positiva Alta (.96). Esto quiere decir que el ancho del petalo esta directamente relacionado con su largo. 
+
+```{r}
+data("iris")
+my_data <- iris[,c(3,4)]
+res <- cor(my_data)
+round(res,2)
+corrplot::corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, insig = "p-value",)
+```
+
+¿Qué par de dimensiones están más
+correlacionadas?
+
+R: El ancho y el largo del Petalo.
+
+```{r}
+data("iris")
+my_data <- iris[,c(1,2,3,4)]
+res <- cor(my_data)
+round(res,2)
+corrplot::corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45, insig = "p-value",)
+```
+
+Ninguna de las flores en el dataset tiene un
+ancho de sépalo de 1.8 cm. ¿Qué longitud de
+sépalo esperaríamos para una flor que
+tuviera 1.8 cm como ancho de sépalo?
+
+R: Al estar poco relacionadas la anchura y la longitud del sepalo, su valor no se podria determinar.
+
+¿A qué especie pertenecería un Iris con un
+ancho de sépalo de 1.8 cm?
+
+R: Posiblemente se asociaria con la especia Versicolor, debido a que una de las caracteristicas de estas es que sus sepalos son pequeños.
+
+Las 3 especies contienen subespecies que
+pueden identificarse a partir de los datos?
+
+R: Si, pues hay algunos valores que son muy similares entre especies.
+
